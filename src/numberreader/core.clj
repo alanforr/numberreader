@@ -63,7 +63,7 @@
 
 (defn hundreds-to-string
   "Takes a number in the range 0 to 9.
-  Returns a blank string if zero and the string \"arg hundred\" otherwise."
+  Returns a blank string if zero and the string \"hs hundred\" otherwise."
   [hs]
   (if (zero? hs)
     ""
@@ -71,7 +71,7 @@
 
 (defn thousands-to-string
   "Takes a number in the range 0 to 9.
-  Returns a blank string if zero and and the string \"arg thousand\" otherwise."
+  Returns a blank string if zero and and the string \"ths thousand\" otherwise."
   [ths]
   (if (zero? ths)
     ""
