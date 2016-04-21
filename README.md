@@ -6,7 +6,7 @@ For example, the library would translate 111 into "one hundred and eleven" and 6
 
 If the number is not between 0 and 1000 inclusive, an exception will be thrown.
 
-Documentation can be found [here](https://github.com/alanforr/numberreader/blob/master/target/doc/intro.html) and was generated using [codox](https://github.com/weavejester/codox).
+Documentation can be found in target/doc/ and was generated using [codox](https://github.com/weavejester/codox).
 
 ## Usage
 
