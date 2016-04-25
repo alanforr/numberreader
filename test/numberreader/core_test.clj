@@ -39,7 +39,14 @@
 (deftest thousands-to-string-test
   (are [x y] (= x y)
        (thousands-to-string 0) ""
-       (thousands-to-string 1) "one thousand"))
+       (thousands-to-string 1) "one thousand"
+       (thousands-to-string 831) "eight hundred and thirty-one thousand"))
+
+(deftest tens-hundreds-to-string-test
+  (are [x y] (= x y)
+       (tens-hundreds-to-string 341) "three hundred and forty-one"
+       (tens-hundreds-to-string 300) "three hundred"
+       (tens-hundreds-to-string 0) "zero"))
 
 (deftest combine-lower-higher-test
   (are [x y] (= x y)
@@ -55,12 +62,15 @@
   (is (thrown? Exception #"Your lower limit is larger than your upper limit."
                (out-of-range 1 5 2))))
 
-(deftest number-to-string-test
-  (are [x y] (= x y)
-       (number-to-string 523) "five hundred and twenty-three"
-       (number-to-string 0) "zero"
-       (number-to-string 1000) "one thousand")
-  (is (thrown? Exception #"Your number is not between 0 and 1000."
+(deftest up-to-mill-test
+    (are [x y] (= x y)
+       (up-to-mill 523) "five hundred and twenty-three"
+       (up-to-mill 0) "zero"
+       (up-to-mill 1000) "one thousand"
+       (up-to-mill 12001) "twelve thousand and one"
+       (up-to-mill 12041) "twelve thousand and forty-one"
+       (up-to-mill 173345) "one hundred and seventy-three thousand three hundred and forty-five")
+  (is (thrown? Exception #"Your number is not between 0 and 999999."
                (number-to-string -12)))
-  (is (thrown? Exception #"Your number is not between 0 and 1000."
-               (number-to-string 1530))))
+  (is (thrown? Exception #"Your number is not between 0 and 999999."
+               (number-to-string 153000000))))

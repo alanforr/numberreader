@@ -31,21 +31,27 @@
    80 "eighty"
    90 "ninety"})
 
+(defn magnitude-coefficient
+  "Gives factor in front of terms of two given magnitudes.
+  For example, (magnitude-coefficient 340594 100000 1000) would give 340."
+  [number upper lower]
+  (let [left (rem number upper)]
+    (int (/ left lower))))
+
 (defn thousands
   "Gives the number of 1000s in number."
   [number]
-  (int (/ number 1000)))
+  (magnitude-coefficient number 1000000 1000))
 
 (defn hundreds
   "Gives the number of 100s in number."
   [number]
-  (let [left (rem number 1000)]
-    (int (/ left 100))))
+  (magnitude-coefficient number 1000 100))
 
 (defn tens
   "Gives what is left over from number after the thousands and hundreds have been removed."
   [number]
-  (rem number 100))
+  (magnitude-coefficient number 100 1))
 
 (defn tens-to-string
   "Takes a number in the range 0 to 99 and produces a string representing that number."
@@ -61,21 +67,13 @@
               (numbers-dictionary))]
       (str ts "-" ones))))
 
-(defn hundreds-to-string
-  "Takes a number in the range 0 to 9.
-  Returns a blank string if zero and the string \"hs hundred\" otherwise."
-  [hs]
-  (if (zero? hs)
+(defn mag-to-string
+  "Takes a number.
+  Returns a blank string if zero and and the string (str mag st) otherwise."
+  [mag st f]
+  (if (zero? mag)
     ""
-    (str (numbers-dictionary hs) " hundred")))
-
-(defn thousands-to-string
-  "Takes a number in the range 0 to 9.
-  Returns a blank string if zero and and the string \"ths thousand\" otherwise."
-  [ths]
-  (if (zero? ths)
-    ""
-    (str (numbers-dictionary ths) " thousand")))
+    (str (f mag) st)))
 
 (defn combine-lower-higher
   "Takes strings representing lower and higher numbers and combines them using a connector.
@@ -87,6 +85,12 @@
     (= "zero" lower) higher
     :else (str higher connector lower)))
 
+(defn hundreds-to-string
+  "Takes a number in the range 0 to 9.
+  Returns a blank string if zero and the string \"hs hundred\" otherwise."
+  [hs]
+  (mag-to-string hs " hundred" numbers-dictionary))
+
 (defn out-of-range
   "Checks whether the number is greater than lower and less than upper.
   Throws an exception if the lower is larger than upper."
@@ -95,13 +99,43 @@
     (throw (Exception. "Your lower limit is larger than your upper limit."))
     (or (> number upper) (< number lower))))
 
+(defn join-mags
+  [s1 s2]
+    (combine-lower-higher s1 s2 " "))
+
 (defn number-to-string
-  "Converts a number to a gramatically correct string if it is between 0 and 1000."
+  "Converts a number to a gramatically correct string if it is between 0 and maximum,
+  given functions for napping the various orders of magnitude to strings."
+  [number maximum numstringfs joinfunc]
+  (if (out-of-range number 0 maximum)
+    (throw (Exception. (str "Your number is not between 0 and " maximum ".")))
+    (let [mags ((apply juxt numstringfs) number)
+          most (reduce joinfunc "" (butlast mags))]
+      (combine-lower-higher (clojure.string/trim most) (last mags) " and "))))
+
+(defn tens-hundreds-to-string
+  "Works out strings for tens and hundreds and then joins them."
   [number]
-  (if (out-of-range number 0 1000)
-    (throw (Exception. "Your number is not between 0 and 1000."))
-    (let [ts (tens-to-string (tens number))
-          hs (hundreds-to-string (hundreds number))
-          ths (thousands-to-string (thousands number))
-          ts-and-hs (combine-lower-higher hs ts " and ")]
-      (combine-lower-higher ths ts-and-hs " "))))
+  (number-to-string
+    number
+    999
+    [(comp hundreds-to-string hundreds)
+     (comp tens-to-string tens)]
+    join-mags))
+
+(defn thousands-to-string
+  "Takes a number in the range 1 to 999 converts it with tens-hundreds-to-string
+  and adds the string \" thousand\" to the end."
+  [ths]
+  (mag-to-string ths " thousand" tens-hundreds-to-string))
+
+(defn up-to-mill
+  "Converts a number to a gramatically correct string if it is between 0 and 1 million-1 inclusive."
+  [number]
+  (number-to-string
+    number
+    999999
+    [(comp thousands-to-string thousands)
+     (comp hundreds-to-string hundreds)
+     (comp tens-to-string tens)]
+    join-mags))
