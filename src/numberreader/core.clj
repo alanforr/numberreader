@@ -105,7 +105,8 @@
 
 (defn number-to-string
   "Converts a number to a gramatically correct string if it is between 0 and maximum,
-  given functions for napping the various orders of magnitude to strings."
+  given functions for mapping the various orders of magnitude to strings
+  and a function for joining the strings."
   [number maximum numstringfs joinfunc]
   (if (out-of-range number 0 maximum)
     (throw (Exception. (str "Your number is not between 0 and " maximum ".")))
