@@ -1,4 +1,5 @@
-(ns numberreader.core)
+(ns numberreader.core
+  (:require [clojure.math.numeric-tower :as nt :only '[expt]]))
 
 (def numbers-dictionary
   "A hash-map that contains numbers as keys and string representations of those numbers as values."
@@ -31,6 +32,22 @@
    80 "eighty"
    90 "ninety"})
 
+(def orders
+  "A hash whose keys are numbers standing for orders of magnitude.
+  The vals are the strings describing those order of magnitude,
+  e.g for the key 3 the corresponding val is \"thousand\"."
+  (let [get-name-order (fn [v] (clojure.string/lower-case (nth v 2)))
+        get-order (fn [v]
+                    (-> v
+                    (second)
+                    (#(drop 2 %))
+                    (#(apply str %))
+                    (read-string)))
+        ls (clojure.string/split-lines (slurp "resources/orders.txt"))
+        sls (map #(clojure.string/split % #"\t") ls)
+        vs (map #(vector (get-order %) (get-name-order %)) sls)]
+    (conj {2 "hundred" 3 "thousand"} (into {} vs))))
+
 (defn magnitude-coefficient
   "Gives factor in front of terms of two given magnitudes.
   For example, (magnitude-coefficient 340594 100000 1000) would give 340."
@@ -38,20 +55,10 @@
   (let [left (rem number upper)]
     (int (/ left lower))))
 
-(defn thousands
-  "Gives the number of 1000s in number."
-  [number]
-  (magnitude-coefficient number 1000000 1000))
-
-(defn hundreds
-  "Gives the number of 100s in number."
-  [number]
-  (magnitude-coefficient number 1000 100))
-
-(defn tens
-  "Gives what is left over from number after the thousands and hundreds have been removed."
-  [number]
-  (magnitude-coefficient number 100 1))
+(defn magnitude-orders
+  "Gives factor in front of terms of two given orders of magnitude."
+  [number upperorder loworder]
+  (magnitude-coefficient number (nt/expt 10 upperorder) (nt/expt 10 loworder)))
 
 (defn tens-to-string
   "Takes a number in the range 0 to 99 and produces a string representing that number."
@@ -69,7 +76,7 @@
 
 (defn mag-to-string
   "Takes a number.
-  Returns a blank string if zero and and the string (str mag st) otherwise."
+  Returns a blank string if zero and and the string (str (f mag) st) otherwise."
   [mag st f]
   (if (zero? mag)
     ""
@@ -85,11 +92,10 @@
     (= "zero" lower) higher
     :else (str higher connector lower)))
 
-(defn hundreds-to-string
-  "Takes a number in the range 0 to 9.
-  Returns a blank string if zero and the string \"hs hundred\" otherwise."
-  [hs]
-  (mag-to-string hs " hundred" numbers-dictionary))
+(defn join-mags
+  "Takes strings representing lower and higher numbers and combines them using a space."
+  [s1 s2]
+    (combine-lower-higher s1 s2 " "))
 
 (defn out-of-range
   "Checks whether the number is greater than lower and less than upper.
@@ -98,10 +104,6 @@
   (if (> lower upper)
     (throw (Exception. "Your lower limit is larger than your upper limit."))
     (or (> number upper) (< number lower))))
-
-(defn join-mags
-  [s1 s2]
-    (combine-lower-higher s1 s2 " "))
 
 (defn number-to-string
   "Converts a number to a gramatically correct string if it is between 0 and maximum,
@@ -120,23 +122,31 @@
   (number-to-string
     number
     999
-    [(comp hundreds-to-string hundreds)
-     (comp tens-to-string tens)]
+    [(comp (fn [nm] (mag-to-string nm (str " " (orders 2)) numbers-dictionary))
+           (fn [n] (magnitude-orders n 3 2)))
+     (comp tens-to-string
+           (fn [n] (magnitude-orders n 2 0)))]
     join-mags))
 
-(defn thousands-to-string
-  "Takes a number in the range 1 to 999 converts it with tens-hundreds-to-string
-  and adds the string \" thousand\" to the end."
-  [ths]
-  (mag-to-string ths " thousand" tens-hundreds-to-string))
+(defn string-function-generator [n]
+  (comp (fn [y] (mag-to-string y (str " " (orders n)) tens-hundreds-to-string))
+        (fn [x] (magnitude-orders x (+ n 3) n))))
 
-(defn up-to-mill
-  "Converts a number to a gramatically correct string if it is between 0 and 1 million-1 inclusive."
+(def number-string-functions
+  (let [sorders (sort (keys orders))
+        tes (comp tens-to-string #(magnitude-orders % 2 0))]
+    (concat
+      (mapv string-function-generator (reverse (drop 1 sorders)))
+      [(comp (fn [nm] (mag-to-string nm (str " " (orders 2)) numbers-dictionary))
+             (fn [n] (magnitude-orders n 3 2)))
+       (comp tens-to-string
+             (fn [n] (magnitude-orders n 2 0)))])))
+
+(defn all-numbers-to-string
   [number]
+  "Converts a number to a gramatically correct string if it is between 0 and 10^306-1 inclusive."
   (number-to-string
     number
-    999999
-    [(comp thousands-to-string thousands)
-     (comp hundreds-to-string hundreds)
-     (comp tens-to-string tens)]
+    (-' (nt/expt 10 306) 1)
+    number-string-functions
     join-mags))

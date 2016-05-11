@@ -1,46 +1,18 @@
 (ns numberreader.core-test
   (:require [clojure.test :refer :all]
-            [numberreader.core :refer :all]))
+            [numberreader.core :refer :all]
+            [clojure.math.numeric-tower :as nt :only '[expt]]))
 
-(deftest thousands-test
+(deftest magnitude-coefficient-test
   (are [x y] (= x y)
-       (thousands 1000) 1
-       (thousands 2430) 2
-       (thousands 250) 0
-       (thousands 35) 0
-       (thousands 3) 0))
-
-(deftest hundreds-test
-  (are [x y] (= x y)
-       (hundreds 5000) 0
-       (hundreds 3520) 5
-       (hundreds 230) 2
-       (hundreds 93) 0
-       (hundreds 6) 0))
-
-(deftest tens-test
-  (are [x y] (= x y)
-       (tens 3400) 0
-       (tens 7630) 30
-       (tens 305) 5
-       (tens 43) 43
-       (tens 4) 4))
+       (magnitude-coefficient 321156 1000000 1000) 321
+       (magnitude-coefficient 56 1000000 1000) 0
+       (magnitude-coefficient 1431780 1000000 1000) 431))
 
 (deftest tens-to-string-test
   (are [x y] (= x y)
-       (tens-to-string 53) "fifty-three"
-       (tens-to-string 10) "ten"))
-
-(deftest hundreds-to-string-test
-  (are [x y] (= x y)
-       (hundreds-to-string 0) ""
-       (hundreds-to-string 3) "three hundred"))
-
-(deftest thousands-to-string-test
-  (are [x y] (= x y)
-       (thousands-to-string 0) ""
-       (thousands-to-string 1) "one thousand"
-       (thousands-to-string 831) "eight hundred and thirty-one thousand"))
+       (tens-to-string 1) "one"
+       (tens-to-string 31) "thirty-one"))
 
 (deftest tens-hundreds-to-string-test
   (are [x y] (= x y)
@@ -62,15 +34,19 @@
   (is (thrown? Exception #"Your lower limit is larger than your upper limit."
                (out-of-range 1 5 2))))
 
-(deftest up-to-mill-test
+(deftest all-numbers-to-string-test
     (are [x y] (= x y)
-       (up-to-mill 523) "five hundred and twenty-three"
-       (up-to-mill 0) "zero"
-       (up-to-mill 1000) "one thousand"
-       (up-to-mill 12001) "twelve thousand and one"
-       (up-to-mill 12041) "twelve thousand and forty-one"
-       (up-to-mill 173345) "one hundred and seventy-three thousand three hundred and forty-five")
-  (is (thrown? Exception #"Your number is not between 0 and 999999."
+       (all-numbers-to-string 523) "five hundred and twenty-three"
+       (all-numbers-to-string 0) "zero"
+       (all-numbers-to-string 1000) "one thousand"
+       (all-numbers-to-string 12001) "twelve thousand and one"
+       (all-numbers-to-string 12041) "twelve thousand and forty-one"
+       (all-numbers-to-string 173345) "one hundred and seventy-three thousand three hundred and forty-five"
+       (all-numbers-to-string 123456789101112)
+         "one hundred and twenty-three trillion four hundred and fifty-six billion seven hundred and eighty-nine million one hundred and one thousand one hundred and twelve"
+       (all-numbers-to-string 1000000000000) "one trillion"
+       (all-numbers-to-string 1000000000012) "one trillion and twelve")
+  (is (thrown? Exception #"Your number is not between 0 and 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999."
                (number-to-string -12)))
-  (is (thrown? Exception #"Your number is not between 0 and 999999."
-               (number-to-string 153000000))))
+  (is (thrown? Exception #"Your number is not between 0 and 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999."
+               (number-to-string (nt/expt 10 307)))))

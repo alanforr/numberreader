@@ -1,0 +1,69 @@
+1	106	Million	Million	Million	M	Mega-
+2	109	Billion	Thousand million	Milliard	G	Giga-
+3	1012	Trillion	Billion	Billion	T	Tera-
+4	1015	Quadrillion	Thousand billion	Billiard	P	Peta-
+5	1018	Quintillion	Trillion	Trillion	E	Exa-
+6	1021	Sextillion	Thousand trillion	Trilliard	Z	Zetta-
+7	1024	Septillion	Quadrillion	Quadrillion	Y	Yotta-
+8	1027	Octillion	Thousand quadrillion	Quadrilliard
+9	1030	Nonillion	Quintillion	Quintillion
+10	1033	Decillion	Thousand quintillion	Quintilliard
+11	1036	Undecillion	Sextillion	Sextillion
+12	1039	Duodecillion	Thousand sextillion	Sextilliard
+13	1042	Tredecillion	Septillion	Septillion
+14	1045	Quattuordecillion	Thousand septillion	Septilliard
+15	1048	Quinquadecillion	Octillion	Octillion
+16	1051	Sedecillion	Thousand octillion	Octilliard
+17	1054	Septendecillion	Nonillion	Nonillion
+18	1057	Octodecillion	Thousand nonillion	Nonilliard
+19	1060	Novendecillion	Decillion	Decillion
+20	1063	Vigintillion	Thousand decillion	Decilliard
+21	1066	Unvigintillion	Undecillion	Undecillion
+22	1069	Duovigintillion	Thousand undecillion	Undecilliard
+23	1072	Tresvigintillion	Duodecillion	Duodecillion
+24	1075	Quattuorvigintillion	Thousand duodecillion	Duodecilliard
+25	1078	Quinquavigintillion	Tredecillion	Tredecillion
+26	1081	Sesvigintillion	Thousand tredecillion	Tredecilliard
+27	1084	Septemvigintillion	Quattuordecillion	Quattuordecillion
+28	1087	Octovigintillion	Thousand quattuordecillion	Quattuordecilliard
+29	1090	Novemvigintillion	Quindecillion	Quindecillion
+30	1093	Trigintillion	Thousand quindecillion	Quindecilliard
+31	1096	Untrigintillion	Sedecillion	Sedecillion
+32	1099	Duotrigintillion	Thousand sedecillion	Sedecilliard
+33	10102	Trestrigintillion	Septendecillion	Septendecillion
+34	10105	Quattuortrigintillion	Thousand septendecillion	Septendecilliard
+35	10108	Quinquatrigintillion	Octodecillion	Octodecillion
+36	10111	Sestrigintillion	Thousand octodecillion	Octodecilliard
+37	10114	Septentrigintillion	Novendecillion	Novendecillion
+38	10117	Octotrigintillion	Thousand novendecillion	Novendecilliard
+39	10120	Noventrigintillion	Vigintillion	Vigintillion
+40	10123	Quadragintillion	Thousand vigintillion	Vigintilliard
+50	10153	Quinquagintillion	Thousand quinquavigintillion	Quinquavigintilliard
+60	10183	Sexagintillion	Thousand trigintillion	Trigintilliard
+70	10213	Septuagintillion	Thousand quinquatrigintillion	Quinquatrigintilliard
+80	10243	Octogintillion	Thousand quadragintillion	Quadragintilliard
+90	10273	Nonagintillion	Thousand quinquaquadragintillion	Quinquaquadragintilliard
+100	10303	Centillion	Thousand quinquagintillion	Quinquagintilliard
+101	10306	Uncentillion	Unquinquagintillion	Unquinquagintillion
+102	10309	Duocentillion	Thousand unquinquagintillion	Unquinquagintilliard
+103	10312	Trescentillion	Duoquinquagintillion	Duoquinquagintillion
+110	10333	Decicentillion	Thousand quinquaquinquagintillion	Quinquaquinquagintilliard
+111	10336	Undecicentillion	Sesquinquagintillion	Sesquinquagintillion
+120	10363	Viginticentillion	Thousand sexagintillion	Sexagintilliard
+121	10366	Unviginticentillion	Unsexagintillion	Unsexagintillion
+130	10393	Trigintacentillion	Thousand quinquasexagintillion	Quinquasexagintilliard
+140	10423	Quadragintacentillion	Thousand septuagintillion	Septuagintilliard
+150	10453	Quinquagintacentillion	Thousand quinquaseptuagintillion	Quinquaseptuagintilliard
+160	10483	Sexagintacentillion	Thousand octogintillion	Octogintilliard
+170	10513	Septuagintacentillion	Thousand quinquaoctogintillion	Quinquaoctogintilliard
+180	10543	Octogintacentillion	Thousand nonagintillion	Nonagintilliard
+190	10573	Nonagintacentillion	Thousand quinquanonagintillion	Quinquanonagintilliard
+200	10603	Ducentillion	Thousand centillion	Centilliard
+300	10903	Trecentillion	Thousand quinquagintacentillion	Quinquagintacentilliard
+400	101203	Quadringentillion	Thousand ducentillion	Ducentilliard
+500	101503	Quingentillion	Thousand quinquagintaducentillion	Quinquagintaducentilliard
+600	101803	Sescentillion	Thousand trecentillion	Trecentilliard
+700	102103	Septingentillion	Thousand quinquagintatrecentillion	Quinquagintatrecentilliard
+800	102403	Octingentillion	Thousand quadringentillion	Quadringentilliard
+900	102703	Nongentillion	Thousand quinquagintaquadringentillion	Quinquagintaquadringentilliard
+1000	103003	Millinillion	Thousand quingentillion	Quingentilliard
